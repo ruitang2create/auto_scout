@@ -1,15 +1,20 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Results from './pages/Results';
 
 function App() {
   return (
-    <div className="App">
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Auto Scout</title>
-        <meta name='description' content='A application that help you find auto models information' />
-      </Helmet>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/results">
+          <Results />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
