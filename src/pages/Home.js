@@ -12,7 +12,7 @@ export default function Home(props) {
       <div
         className={styles.heroBg}
         style={{
-          backgroundImage: `linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)), url("/assets/images/cars_inventory.jpg")`,
+          backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0) 90%, rgba(255, 255, 255, 0.9) 100%), url("/assets/images/cars_museum.jpg")`,
         }}
       />
       <Form className={styles.searchForm} onSubmit={handleSubmit}>
