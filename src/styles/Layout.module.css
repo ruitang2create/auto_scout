@@ -1,0 +1,14 @@
+.pageLayout {
+    position: relative;
+}
+
+.topNavItem {
+    text-decoration: none !important;
+    color: hsla(0, 0%, 100%, .5) !important;
+    margin: auto .5rem;
+    transition: .2s;
+}
+
+.topNavItem:hover {
+    color: hsla(0, 0%, 100%, .8) !important;
+}
