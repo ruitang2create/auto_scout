@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import Results from './pages/Results';
-import Axios from 'axios';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Results from "./pages/Results";
 
 function App() {
-  const CAR_YEAR_MIN = 1980;
-  const CAR_YEAR_MAX = new Date().getFullYear();
+  const CAR_YEAR_LIMIT = {
+    MIN: 1980,
+    MAX: new Date().getFullYear(),
+  };
   const [searchAttributes, setSearchAttributes] = useState({
-    type: '',
-    make: '',
-    year: CAR_YEAR_MAX,
+    type: "",
+    make: "",
+    year: "",
   });
 
   return (
@@ -20,12 +21,14 @@ function App() {
           <Results
             searchAttributes={searchAttributes}
             searchSetter={setSearchAttributes}
+            yearLimit={CAR_YEAR_LIMIT}
           />
         </Route>
         <Route path="/">
           <Home
             searchAttributes={searchAttributes}
             searchSetter={setSearchAttributes}
+            yearLimit={CAR_YEAR_LIMIT}
           />
         </Route>
       </Switch>
