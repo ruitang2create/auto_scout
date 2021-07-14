@@ -1,11 +1,13 @@
 import React from "react";
+import { withRouter } from 'react-router-dom';
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
 import { Form, Button } from "react-bootstrap";
 
-export default function Home(props) {
+function Home(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
+    props.history.push("/results");
   };
   return (
     <Layout title="Home Page">
@@ -38,3 +40,5 @@ export default function Home(props) {
     </Layout>
   );
 }
+
+export default withRouter(Home);
