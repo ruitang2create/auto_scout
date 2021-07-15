@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Overlay, Tooltip } from "react-bootstrap";
 
 function Home(props) {
   const [allMakes, setAllMakes] = useState([]);
   const [types, setTypes] = useState([]);
   const [typeUnset, setTypeUnset] = useState(true);
+  const [show, setShow] = useState(false);
+  const target = useRef(null);
+  const invalidYearMsg = `Set year between ${props.yearLimit.MIN}-${props.yearLimit.MAX}!`;
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (
@@ -43,19 +47,14 @@ function Home(props) {
     });
   };
 
-  // const setYearHandler = (event) => {
-  //   props.searchSetter({
-  //     ...props.searchAttributes,
-  //     year: event.target.value,
-  //   });
-  // };
-
   const yearValidator = (event) => {
     const year = event.target.value;
     if (year < props.yearLimit.MIN || year > props.yearLimit.MAX) {
-      alert(
-        `Set a valid year between ${props.yearLimit.MIN}-${props.yearLimit.MAX}!`
-      );
+      setShow(true);
+      setTimeout( () => setShow(false), 2000);
+      // alert(
+      //   `Set a valid year between ${props.yearLimit.MIN}-${props.yearLimit.MAX}!`
+      // );
       event.target.value = "";
     } else {
       props.searchSetter({
@@ -135,9 +134,16 @@ function Home(props) {
           </Form.Control>
         </div>
         <div className={styles.inputWrapper}>
-          <Form.Control placeholder="Car Year" onBlur={yearValidator} />
+          <Form.Control ref={target} placeholder="Car Year" onBlur={yearValidator} />
         </div>
-        <Button type="submit">Search</Button>
+        <Button type="submit" variant='danger'>Search</Button>
+        <Overlay target={target.current} show={show} onHide={() => setShow(false)} placement="top" >
+          {(props) => (
+            <Tooltip id="invalidYearAlert" {...props}>
+              {invalidYearMsg}
+            </Tooltip>
+          )}
+        </Overlay>
       </Form>
     </Layout>
   );
