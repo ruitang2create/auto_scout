@@ -66,28 +66,6 @@ function Home(props) {
     setTimeout(() => setShow(false), 2000);
   }
 
-  // const getAllMakes = async () => {
-  //   try {
-  //     let apiUrl = "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json";
-  //     // console.log("getting all car makers...");
-  //     const res = await axios.get(apiUrl);
-  //     props.setAllMakes(res.data.Results);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // const getAllTypes = async (make) => {
-  //   try {
-  //     let apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMake/${make}?format=json`;
-  //     // console.log(`getting all car types from ${make}...`);
-  //     const res = await axios.get(apiUrl);
-  //     props.setTypes(res.data.Results);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
   useEffect(() => {
     props.searchSetter({
       type: "",

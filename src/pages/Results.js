@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Spinner, Offcanvas, FormControl, Button } from 'react-bootstrap';
+import { Spinner, Offcanvas, FormControl, Form, Row, Col } from 'react-bootstrap';
 import Layout from '../components/Layout';
 import ResultItem from '../components/ResultItem';
 import styles from '../styles/Results.module.css';
@@ -9,31 +9,34 @@ import { BsCaretRightFill } from 'react-icons/bs';
 export default function Results(props) {
     const [modelsList, setModelsList] = useState([]);
     const [sidebarShow, setSidebarShow] = useState(false);
+    const [typeUnset, setTypeUnset] = useState(true);
 
     const closeSidebar = () => setSidebarShow(false);
     const openSidebar = () => setSidebarShow(true);
 
     const setMakeHandler = (event) => {
         const makeName = event.target.value;
-        props.searchSetter({
-            ...props.searchCriteria,
-            make: makeName,
-            type: "",
-        });
-        if (makeName !== "") {
+        setTypeUnset(true);
+        if (makeName !== '') {
+            props.searchSetter({
+                ...props.searchCriteria,
+                make: makeName,
+                type: "",
+            });
             props.getAllTypes(makeName);
         }
     };
 
     const setTypeHandler = (event) => {
         const typeName = event.target.value;
+        setTypeUnset(false);
         props.searchSetter({
             ...props.searchCriteria,
             type: typeName,
         });
     };
 
-    const yearValidator = (event) => {
+    const setYearHandler = (event) => {
         const year = event.target.value;
         if (year !== '' && (year < props.yearLimit.MIN || year > props.yearLimit.MAX)) {
             event.target.value = '';
@@ -96,7 +99,7 @@ export default function Results(props) {
                     <div>Type</div>
                 </div>
                 {
-                    modelsList.length > 0 ? renderResults() : <Spinner animation='grow' />
+                    modelsList.length > 0 ? renderResults() : <div style={{ marginTop: '2rem' }}><Spinner animation='grow' /></div>
                 }
             </div>
             <div className={styles.sidebarSwitch} onClick={() => openSidebar()}>
@@ -108,37 +111,49 @@ export default function Results(props) {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <div className={styles.sideFilterContainer}>
-                        <div className={styles.inputWrapper}>
-                            <FormControl as="select" onChange={setMakeHandler} defaultValue={props.searchCriteria.make}>
-                                <option value="">Car Make</option>
-                                {props.allMakes.length > 0 &&
-                                    props.allMakes.map((make, index) => {
-                                        return (
-                                            <option key={index} value={make.Make_Name}>
-                                                {make.Make_Name}
-                                            </option>
-                                        );
-                                    })}
-                            </FormControl>
-                        </div>
-                        <div className={styles.inputWrapper}>
-                            <FormControl as="select" onChange={setTypeHandler} defaultValue={props.searchCriteria.type}>
-                                <option value="">
-                                    Car Type
-                                </option>
-                                {props.types.length > 0 &&
-                                    props.types.map((type, index) => {
-                                        return (
-                                            <option key={index} value={type.VehicleTypeName}>
-                                                {type.VehicleTypeName}
-                                            </option>
-                                        );
-                                    })}
-                            </FormControl>
-                        </div>
-                        <div className={styles.inputWrapper}>
-                            <FormControl placeholder="Car Year" onBlur={yearValidator} defaultValue={props.searchCriteria.year} />
-                        </div>
+                        <Form>
+                            <div className={styles.inputWrapper}>
+                                <FormControl as="select" onChange={setMakeHandler} defaultValue={props.searchCriteria.make}>
+                                    <option value="">Car Make</option>
+                                    {props.allMakes.length > 0 &&
+                                        props.allMakes.map((make, index) => {
+                                            return (
+                                                <option key={index} value={make.Make_Name}>
+                                                    {make.Make_Name}
+                                                </option>
+                                            );
+                                        })}
+                                </FormControl>
+                            </div>
+                            <div className={styles.inputWrapper}>
+                                <FormControl as="select" onChange={setTypeHandler} defaultValue={props.searchCriteria.type}>
+                                    <option value="" selected={typeUnset}>
+                                        Car Type
+                                    </option>
+                                    {props.types.length > 0 &&
+                                        props.types.map((type, index) => {
+                                            return (
+                                                <option key={index} value={type.VehicleTypeName}>
+                                                    {type.VehicleTypeName}
+                                                </option>
+                                            );
+                                        })}
+                                </FormControl>
+                            </div>
+                            <Form.Group as={Row}>
+                                <Form.Label column sm="2" xs="2">{props.yearLimit.MIN}</Form.Label>
+                                <Col sm="8" xs="8">
+                                    <Form.Range
+                                        onChange={setYearHandler}
+                                        defaultValue={props.searchCriteria.year}
+                                        value={props.searchCriteria.year}
+                                        min={props.yearLimit.MIN}
+                                        max={props.yearLimit.MAX}
+                                    />
+                                </Col>
+                                <Form.Label column sm="1" xs="1">{props.yearLimit.MAX}</Form.Label>
+                            </Form.Group>
+                        </Form>
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>
