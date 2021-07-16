@@ -2,6 +2,13 @@
     width: 300px !important;
 }
 
+select {
+    width: 100% !important;
+}
+
 option {
-    
+    width: 267px !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
 }
