@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
-import axios from "axios";
 import Layout from "../components/Layout";
 import styles from "../styles/Home.module.css";
 import { Form, Button, Overlay, Tooltip } from "react-bootstrap";
 
 function Home(props) {
-  const [allMakes, setAllMakes] = useState([]);
-  const [types, setTypes] = useState([]);
   const [typeUnset, setTypeUnset] = useState(true);
   const [showYearAlert, setShowYearAlert] = useState(false);
   const [showTypeAlert, setShowTypeAlert] = useState(false);
@@ -24,10 +21,6 @@ function Home(props) {
     event.preventDefault();
     if (props.searchCriteria.make === "") {
       showAlert(setShowMakeAlert);
-    } else if (props.searchCriteria.type === "") {
-      showAlert(setShowTypeAlert);
-    } else if (props.searchCriteria.year === "") {
-      showAlert(setShowYearAlert);
     } else {
       props.history.push("/results");
     }
@@ -42,7 +35,7 @@ function Home(props) {
       type: "",
     });
     if (makeName !== "") {
-      getAllTypes(makeName);
+      props.getAllTypes(makeName);
     }
   };
 
@@ -57,9 +50,9 @@ function Home(props) {
 
   const yearValidator = (event) => {
     const year = event.target.value;
-    if (year < props.yearLimit.MIN || year > props.yearLimit.MAX) {
+    if (year !== '' && (year < props.yearLimit.MIN || year > props.yearLimit.MAX)) {
       showAlert(setShowYearAlert);
-      event.target.value = "";
+      event.target.value = '';
     } else {
       props.searchSetter({
         ...props.searchCriteria,
@@ -73,28 +66,27 @@ function Home(props) {
     setTimeout(() => setShow(false), 2000);
   }
 
-  const getAllMakes = async () => {
-    try {
-      let apiUrl =
-        "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json";
-      // console.log("getting all car makers...");
-      const res = await axios.get(apiUrl);
-      setAllMakes(res.data.Results);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const getAllMakes = async () => {
+  //   try {
+  //     let apiUrl = "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json";
+  //     // console.log("getting all car makers...");
+  //     const res = await axios.get(apiUrl);
+  //     props.setAllMakes(res.data.Results);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  const getAllTypes = async (make) => {
-    try {
-      let apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMake/${make}?format=json`;
-      // console.log(`getting all car types from ${make}...`);
-      const res = await axios.get(apiUrl);
-      setTypes(res.data.Results);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const getAllTypes = async (make) => {
+  //   try {
+  //     let apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMake/${make}?format=json`;
+  //     // console.log(`getting all car types from ${make}...`);
+  //     const res = await axios.get(apiUrl);
+  //     props.setTypes(res.data.Results);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   useEffect(() => {
     props.searchSetter({
@@ -102,7 +94,7 @@ function Home(props) {
       make: "",
       year: "",
     });
-    getAllMakes();// eslint-disable-next-line
+    props.getAllMakes();// eslint-disable-next-line
   }, []);
 
   return (
@@ -117,8 +109,8 @@ function Home(props) {
         <div className={styles.inputWrapper}>
           <Form.Control ref={makeTarget} as="select" onChange={setMakeHandler}>
             <option value="">Car Make</option>
-            {allMakes.length > 0 &&
-              allMakes.map((make, index) => {
+            {props.allMakes.length > 0 &&
+              props.allMakes.map((make, index) => {
                 return (
                   <option key={index} value={make.Make_Name}>
                     {make.Make_Name}
@@ -132,8 +124,8 @@ function Home(props) {
             <option value="" selected={typeUnset}>
               Car Type
             </option>
-            {types.length > 0 &&
-              types.map((type, index) => {
+            {props.types.length > 0 &&
+              props.types.map((type, index) => {
                 return (
                   <option key={index} value={type.VehicleTypeName}>
                     {type.VehicleTypeName}

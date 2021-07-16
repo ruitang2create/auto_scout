@@ -29,3 +29,26 @@
     justify-content: center;
     align-items: center;
 }
+
+.sidebarSwitch {
+    color: #fff;
+    background-color: #212529;
+    /* border: 2px #aaa solid; */
+    border-left: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    width: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 50vh;
+    padding: 0.4rem;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.sidebarSwitch:hover {
+    width: 40px;
+}

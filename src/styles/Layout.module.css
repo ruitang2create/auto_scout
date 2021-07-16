@@ -2,6 +2,11 @@
     position: relative;
 }
 
+.topNavContainer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
 .topNavItem {
     text-decoration: none !important;
     color: hsla(0, 0%, 100%, .5) !important;
