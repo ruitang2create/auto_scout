@@ -9,23 +9,31 @@ function Home(props) {
   const [allMakes, setAllMakes] = useState([]);
   const [types, setTypes] = useState([]);
   const [typeUnset, setTypeUnset] = useState(true);
-  const [show, setShow] = useState(false);
-  const target = useRef(null);
-  const invalidYearMsg = `Set year between ${props.yearLimit.MIN}-${props.yearLimit.MAX}!`;
+  const [showYearAlert, setShowYearAlert] = useState(false);
+  const [showTypeAlert, setShowTypeAlert] = useState(false);
+  const [showMakeAlert, setShowMakeAlert] = useState(false);
+  const yearTarget = useRef(null);
+  const typeTarget = useRef(null);
+  const makeTarget = useRef(null);
+
+  const invalidYearMsg = `Number between ${props.yearLimit.MIN}-${props.yearLimit.MAX}`;
+  const invalidMakeMsg = `Select a car make`;
+  const invalidTypeMsg = `Select a car type`;
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (
-      props.searchAttributes.make !== "" &&
-      props.searchAttributes.type !== "" &&
-      props.searchAttributes.year !== ""
-    ) {
+    if (props.searchAttributes.make === "") {
+      showAlert(setShowMakeAlert);
+    } else if (props.searchAttributes.type === "") {
+      showAlert(setShowTypeAlert);
+    } else if (props.searchAttributes.year === "") {
+      showAlert(setShowYearAlert);
+    } else {
       props.history.push("/results");
     }
   };
 
   const setMakeHandler = (event) => {
-    // alert("Setting make to: " + event.target.value);
     const makeName = event.target.value;
     setTypeUnset(true);
     props.searchSetter({
@@ -50,11 +58,9 @@ function Home(props) {
   const yearValidator = (event) => {
     const year = event.target.value;
     if (year < props.yearLimit.MIN || year > props.yearLimit.MAX) {
-      setShow(true);
-      setTimeout( () => setShow(false), 2000);
-      // alert(
-      //   `Set a valid year between ${props.yearLimit.MIN}-${props.yearLimit.MAX}!`
-      // );
+      // setShowYearAlert(true);
+      // setTimeout(() => setShowYearAlert(false), 2000);
+      showAlert(setShowYearAlert);
       event.target.value = "";
     } else {
       props.searchSetter({
@@ -64,11 +70,16 @@ function Home(props) {
     }
   };
 
+  const showAlert = (setShow) => {
+    setShow(true);
+    setTimeout(() => setShow(false), 2000);
+  }
+
   const getAllMakes = async () => {
     try {
       let apiUrl =
         "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json";
-      console.log("getting all car makers...");
+      // console.log("getting all car makers...");
       const res = await axios.get(apiUrl);
       setAllMakes(res.data.Results);
     } catch (err) {
@@ -79,7 +90,7 @@ function Home(props) {
   const getAllTypes = async (make) => {
     try {
       let apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMake/${make}?format=json`;
-      console.log(`getting all car types from ${make}...`);
+      // console.log(`getting all car types from ${make}...`);
       const res = await axios.get(apiUrl);
       setTypes(res.data.Results);
     } catch (err) {
@@ -93,7 +104,7 @@ function Home(props) {
       make: "",
       year: "",
     });
-    getAllMakes();
+    getAllMakes();// eslint-disable-next-line
   }, []);
 
   return (
@@ -106,7 +117,7 @@ function Home(props) {
       />
       <Form className={styles.searchForm} onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>
-          <Form.Control as="select" onChange={setMakeHandler}>
+          <Form.Control ref={makeTarget} as="select" onChange={setMakeHandler}>
             <option value="">Car Make</option>
             {allMakes.length > 0 &&
               allMakes.map((make, index) => {
@@ -119,7 +130,7 @@ function Home(props) {
           </Form.Control>
         </div>
         <div className={styles.inputWrapper}>
-          <Form.Control as="select" onChange={setTypeHandler}>
+          <Form.Control ref={typeTarget} as="select" onChange={setTypeHandler}>
             <option value="" selected={typeUnset}>
               Car Type
             </option>
@@ -134,13 +145,27 @@ function Home(props) {
           </Form.Control>
         </div>
         <div className={styles.inputWrapper}>
-          <Form.Control ref={target} placeholder="Car Year" onBlur={yearValidator} />
+          <Form.Control ref={yearTarget} placeholder="Car Year" onBlur={yearValidator} />
         </div>
         <Button type="submit" variant='danger'>Search</Button>
-        <Overlay target={target.current} show={show} onHide={() => setShow(false)} placement="top" >
+        <Overlay target={yearTarget.current} show={showYearAlert} onHide={() => setShowYearAlert(false)} placement="top" >
           {(props) => (
             <Tooltip id="invalidYearAlert" {...props}>
               {invalidYearMsg}
+            </Tooltip>
+          )}
+        </Overlay>
+        <Overlay target={typeTarget.current} show={showTypeAlert} onHide={() => setShowTypeAlert(false)} placement="top" >
+          {(props) => (
+            <Tooltip id="invalidTypeAlert" {...props}>
+              {invalidTypeMsg}
+            </Tooltip>
+          )}
+        </Overlay>
+        <Overlay target={makeTarget.current} show={showMakeAlert} onHide={() => setShowMakeAlert(false)} placement="top" >
+          {(props) => (
+            <Tooltip id="invalidMakeAlert" {...props}>
+              {invalidMakeMsg}
             </Tooltip>
           )}
         </Overlay>
