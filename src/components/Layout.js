@@ -5,7 +5,7 @@ import styles from '../styles/Layout.module.css'
 
 export default function Layout(props) {
   return (
-    <div className={styles.pageLayout} style={{ height: "100vh" }}>
+    <div className={styles.pageLayout} style={{ height: props.height }}>
       <Helmet>
         <meta charSet="utf-8" />
         <title>{props.title}</title>

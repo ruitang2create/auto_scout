@@ -76,7 +76,7 @@ function Home(props) {
   }, []);
 
   return (
-    <Layout title="Home Page">
+    <Layout title="Home Page" height='100vh'>
       <div
         className={styles.heroBg}
         style={{

@@ -1,12 +1,12 @@
 .resultsTitle {
-    font-size: 2rem;
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
 
 .resultsContainer {
     text-align: center;
-    margin: auto 5vw;
+    margin: 1rem 5vw;
 }
 
 .resultsTableHead {
@@ -14,12 +14,14 @@
     grid-template-columns: repeat(4, 1fr);
     font-weight: bold;
     border-bottom: 1px #bbb solid;
+    font-size: clamp(0.7rem, 2vw, 1.4rem);
 }
 
 .resultItem {
     border: 1px #eee solid;
     margin: 1rem 0;
     display: grid;
+    column-gap: 0.3rem;
     grid-template-columns: repeat(4, 1fr);
     padding: 0.5rem 0.5rem;
 }
@@ -28,6 +30,7 @@
     display: grid;
     justify-content: center;
     align-items: center;
+    font-size: clamp(0.7rem, 2vw, 1.4rem);
 }
 
 .sidebarSwitch {

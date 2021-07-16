@@ -93,7 +93,7 @@ export default function Results(props) {
             </div>
             <div className={styles.resultsContainer}>
                 <div className={styles.resultsTableHead}>
-                    <div>Year</div>
+                    <div >Year</div>
                     <div>Make</div>
                     <div>Model</div>
                     <div>Type</div>
