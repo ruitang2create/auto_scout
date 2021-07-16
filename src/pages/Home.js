@@ -22,11 +22,11 @@ function Home(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (props.searchAttributes.make === "") {
+    if (props.searchCriteria.make === "") {
       showAlert(setShowMakeAlert);
-    } else if (props.searchAttributes.type === "") {
+    } else if (props.searchCriteria.type === "") {
       showAlert(setShowTypeAlert);
-    } else if (props.searchAttributes.year === "") {
+    } else if (props.searchCriteria.year === "") {
       showAlert(setShowYearAlert);
     } else {
       props.history.push("/results");
@@ -37,7 +37,7 @@ function Home(props) {
     const makeName = event.target.value;
     setTypeUnset(true);
     props.searchSetter({
-      ...props.searchAttributes,
+      ...props.searchCriteria,
       make: makeName,
       type: "",
     });
@@ -50,7 +50,7 @@ function Home(props) {
     const typeName = event.target.value;
     setTypeUnset(false);
     props.searchSetter({
-      ...props.searchAttributes,
+      ...props.searchCriteria,
       type: typeName,
     });
   };
@@ -58,13 +58,11 @@ function Home(props) {
   const yearValidator = (event) => {
     const year = event.target.value;
     if (year < props.yearLimit.MIN || year > props.yearLimit.MAX) {
-      // setShowYearAlert(true);
-      // setTimeout(() => setShowYearAlert(false), 2000);
       showAlert(setShowYearAlert);
       event.target.value = "";
     } else {
       props.searchSetter({
-        ...props.searchAttributes,
+        ...props.searchCriteria,
         year: event.target.value,
       });
     }

@@ -1,0 +1,31 @@
+.resultsTitle {
+    font-size: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.resultsContainer {
+    text-align: center;
+    margin: auto 5vw;
+}
+
+.resultsTableHead {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    font-weight: bold;
+    border-bottom: 1px #bbb solid;
+}
+
+.resultItem {
+    border: 1px #eee solid;
+    margin: 1rem 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0.5rem 0.5rem;
+}
+
+.modelData {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}

@@ -8,7 +8,7 @@ function App() {
     MIN: 1980,
     MAX: new Date().getFullYear(),
   };
-  const [searchAttributes, setSearchAttributes] = useState({
+  const [searchCriteria, setsearchCriteria] = useState({
     type: "",
     make: "",
     year: "",
@@ -19,15 +19,15 @@ function App() {
       <Switch>
         <Route path="/results">
           <Results
-            searchAttributes={searchAttributes}
-            searchSetter={setSearchAttributes}
+            searchCriteria={searchCriteria}
+            searchSetter={setsearchCriteria}
             yearLimit={CAR_YEAR_LIMIT}
           />
         </Route>
         <Route path="/">
           <Home
-            searchAttributes={searchAttributes}
-            searchSetter={setSearchAttributes}
+            searchCriteria={searchCriteria}
+            searchSetter={setsearchCriteria}
             yearLimit={CAR_YEAR_LIMIT}
           />
         </Route>
