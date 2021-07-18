@@ -8,6 +8,7 @@ import { BsCaretRightFill } from 'react-icons/bs';
 
 export default function Results(props) {
     const [modelsList, setModelsList] = useState([]);
+    const [notFound, setNotFound] = useState(false);
     const [sidebarShow, setSidebarShow] = useState(false);
     const [typeUnset, setTypeUnset] = useState(true);
 
@@ -51,17 +52,21 @@ export default function Results(props) {
     const getModels = async () => {
         let apiUrl = '';
         console.log('Fetching models...');
-        if (props.searchCriteria.make !== '' && props.searchCriteria.type !== '' && props.searchCriteria.year !== '') {
-            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${props.searchCriteria.make}/modelyear/${props.searchCriteria.year}/vehicleType/${props.searchCriteria.type}?format=json`;
-        } else if (props.searchCriteria.make !== '' && props.searchCriteria.type === '' && props.searchCriteria.year !== '') {
-            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${props.searchCriteria.make}/modelyear/${props.searchCriteria.year}?format=json`;
-        } else if (props.searchCriteria.make !== '' && props.searchCriteria.type !== '' && props.searchCriteria.year === '') {
-            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${props.searchCriteria.make}/vehicleType/${props.searchCriteria.type}?format=json`;
-        } else if (props.searchCriteria.make !== '' && props.searchCriteria.type === '' && props.searchCriteria.year === '') {
-            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${props.searchCriteria.make}?format=json`;
+        const make = props.searchCriteria.make.trim();
+        const type = props.searchCriteria.type.trim();
+        const year = props.searchCriteria.year;
+        if (make !== '' && type !== '' && year !== '') {
+            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${make}/modelyear/${year}/vehicleType/${type}?format=json`;
+        } else if (make !== '' && type === '' && year !== '') {
+            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${make}/modelyear/${year}?format=json`;
+        } else if (make !== '' && type !== '' && year === '') {
+            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformakeyear/make/${make}/vehicleType/${type}?format=json`;
+        } else if (make !== '' && type === '' && year === '') {
+            apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make}?format=json`;
         }
         try {
             const res = await axios.get(apiUrl);
+            setNotFound(res.data.Results.length > 0 ? false : true);
             setModelsList(res.data.Results);
         } catch (err) {
             console.error(err);
@@ -89,17 +94,17 @@ export default function Results(props) {
     return (
         <Layout title='Results Page'>
             <div className={styles.resultsTitle} style={{ textAlign: 'center' }}>
-                {`All matches for ${props.searchCriteria.year} ${props.searchCriteria.make} ${props.searchCriteria.type}`}
+                {`All matches for ${props.searchCriteria.year} ${props.searchCriteria.make} ${props.searchCriteria.type}`.trim() + ':'}
             </div>
             <div className={styles.resultsContainer}>
                 <div className={styles.resultsTableHead}>
-                    <div >Year</div>
+                    <div>Year</div>
                     <div>Make</div>
                     <div>Model</div>
                     <div>Type</div>
                 </div>
                 {
-                    modelsList.length > 0 ? renderResults() : <div style={{ marginTop: '2rem' }}><Spinner animation='grow' /></div>
+                    modelsList.length > 0 ? renderResults() : notFound ? <div className={styles.noMatchAlert}>No matches found</div> : <div style={{ marginTop: '2rem' }}><Spinner animation='grow' /></div>
                 }
             </div>
             <div className={styles.sidebarSwitch} onClick={() => openSidebar()}>
@@ -114,7 +119,6 @@ export default function Results(props) {
                         <Form>
                             <div className={styles.inputWrapper}>
                                 <FormControl as="select" onChange={setMakeHandler} defaultValue={props.searchCriteria.make}>
-                                    <option value="">Car Make</option>
                                     {props.allMakes.length > 0 &&
                                         props.allMakes.map((make, index) => {
                                             return (
