@@ -97,7 +97,7 @@ export default function Results(props) {
     }
 
     const handlePageItemClick = (event) => {
-        setCurrentPage(event.target.value);
+        setCurrentPage(parseInt(event.target.value));
     }
 
     const handleYearFilterClick = (event) => {
