@@ -22,9 +22,9 @@
 ## Run the development server locally
 
 ```bash
-yarn dev
+yarn start
 # or
-npm run dev
+npm run start
 ```
 
 Then you should be able to visit the app at http://localhost:3000
