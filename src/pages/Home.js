@@ -50,7 +50,7 @@ function Home(props) {
 
   const yearValidator = (event) => {
     const year = event.target.value;
-    if (year !== '' && (year < props.yearLimit.MIN || year > props.yearLimit.MAX)) {
+    if (year !== '' && (isNaN(year) || year < props.yearLimit.MIN || year > props.yearLimit.MAX)) {
       showAlert(setShowYearAlert);
       event.target.value = '';
     } else {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Spinner, Offcanvas, FormControl, Form, Row, Col} from 'react-bootstrap';
+import { Spinner, Offcanvas, FormControl, Form, Row, Col } from 'react-bootstrap';
 import Layout from '../components/Layout';
 import ResultItem from '../components/ResultItem';
 import styles from '../styles/Results.module.css';
@@ -12,10 +12,10 @@ export default function Results(props) {
     const [notFound, setNotFound] = useState(false);
     const [sidebarShow, setSidebarShow] = useState(false);
     const [typeUnset, setTypeUnset] = useState(true);
-    const [itemsPerPage, setItemsPerpage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const [currFirstItem, setCurrFirstItem] = useState(1);
-    const MAX_ITEMS = 5; // max number of pagination items that are shown at a time
+    const [itemsPerPage, setItemsPerpage] = useState(10);
+    const itemsPerPageOptions = [5, 10, 15, 20, 50];
+    const [filterByYear, setFilterByYear] = useState(props.searchCriteria.year !== '');
 
     const closeSidebar = () => setSidebarShow(false);
     const openSidebar = () => setSidebarShow(true);
@@ -100,6 +100,16 @@ export default function Results(props) {
         setCurrentPage(event.target.value);
     }
 
+    const handleYearFilterClick = (event) => {
+        if(props.searchCriteria.year !== '') {
+            props.searchSetter({
+                ...props.searchCriteria,
+                year: '',
+            });
+        }
+        setFilterByYear(event.target.checked);
+    }
+
     const renderPagination = () => {
         const pgNum = Math.ceil(modelsList.length / itemsPerPage);
         const pageItems = [];
@@ -142,7 +152,28 @@ export default function Results(props) {
                 {`All matches for ${props.searchCriteria.year} ${props.searchCriteria.make} ${props.searchCriteria.type}`.trim() + ':'}
             </div>
             <div className={styles.resultsContainer}>
-                {renderPagination()}
+                <div className={styles.paginationContainer}>
+                    {renderPagination()}
+                    <div className={styles.itemsPerPageSelecterWrapper}>
+                        <label className={styles.itemsPerPageSelecterLabel}>items per page:</label>
+                        <select
+                            className={styles.itemsPerPageSelecter}
+                            value={itemsPerPage}
+                            onChange={(e) => {
+                                setItemsPerpage(e.target.value);
+                                setCurrentPage(1);
+                            }}>
+                            {
+                                itemsPerPageOptions.map((option, index) => {
+                                    return (
+                                        <option key={index} value={option}>{option}</option>
+                                    );
+                                })
+                            }
+                        </select>
+                    </div>
+                    <div style={{ clear: 'both' }}></div>
+                </div>
                 <div className={styles.resultsTableHead}>
                     <div>Year</div>
                     <div>Make</div>
@@ -190,10 +221,11 @@ export default function Results(props) {
                                         })}
                                 </FormControl>
                             </div>
+                            <Form.Check type='checkbox' label='Filter by year' checked={filterByYear} onChange={handleYearFilterClick} />
                             <Form.Group as={Row}>
                                 <Form.Label column sm="2" xs="2">{props.yearLimit.MIN}</Form.Label>
                                 <Col sm="8" xs="8">
-                                    <Form.Range
+                                    <Form.Range disabled={!filterByYear}
                                         onChange={setYearHandler}
                                         defaultValue={props.searchCriteria.year}
                                         value={props.searchCriteria.year}
