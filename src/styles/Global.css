@@ -12,3 +12,16 @@ option {
     text-overflow: ellipsis !important;
     overflow: hidden !important;
 }
+
+.page-item.active .page-link {
+    background-color: #6a727a;
+    border-color: #6a727a;
+}
+
+.page-link {
+    color: #6a727a;
+}
+
+.page-link:focus {
+    color: #6a727a;
+}
