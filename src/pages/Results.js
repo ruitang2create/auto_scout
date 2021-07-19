@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Spinner, Offcanvas, FormControl, Form, Row, Col, Button } from 'react-bootstrap';
+import { Spinner, Offcanvas, FormControl, Form, Row, Col} from 'react-bootstrap';
 import Layout from '../components/Layout';
 import ResultItem from '../components/ResultItem';
 import styles from '../styles/Results.module.css';
@@ -103,17 +103,16 @@ export default function Results(props) {
     const renderPagination = () => {
         const pgNum = Math.ceil(modelsList.length / itemsPerPage);
         const pageItems = [];
-        const paginationSize = window.matchMedia("(max-width: 800px)").matches ? 'sm' : 'normal';
         for (let i = 1; i < pgNum + 1; i++) {
             pageItems.push(i);
         }
 
         return (
             <div className={styles.paginationWrapper}>
-                <Button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(pgNum >= 1 ? 1 : 0)} ><BiChevronsLeft /></Button>
-                <Button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)} ><BiChevronLeft /></Button>
+                <button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(pgNum >= 1 ? 1 : 0)} ><BiChevronsLeft /></button>
+                <button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)} ><BiChevronLeft /></button>
                 <div className={styles.selectWrapper}>
-                    <FormControl as='select' onChange={handlePageItemClick} value={currentPage} style={{ textAlign: 'center' }}>
+                    <select className={styles.pageSelect} onChange={handlePageItemClick} value={currentPage} style={{ textAlign: 'center' }}>
                         {
                             pageItems.map((pageItem, index) => {
                                 return (
@@ -121,10 +120,10 @@ export default function Results(props) {
                                 );
                             })
                         }
-                    </FormControl>
+                    </select>
                 </div>
-                <Button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(currentPage < pgNum ? currentPage + 1 : currentPage)} ><BiChevronRight /></Button>
-                <Button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(pgNum >= 1 ? pgNum : 0)} ><BiChevronsRight /></Button>
+                <button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(currentPage < pgNum ? currentPage + 1 : currentPage)} ><BiChevronRight /></button>
+                <button variant='dark' className={styles.paginationBtn} onClick={() => setCurrentPage(pgNum >= 1 ? pgNum : 0)} ><BiChevronsRight /></button>
             </div>
         );
     }
@@ -158,7 +157,7 @@ export default function Results(props) {
                 <BsCaretRightFill color='white' />
             </div>
             <Offcanvas show={sidebarShow} onHide={closeSidebar}>
-                <Offcanvas.Header closeButton>
+                <Offcanvas.Header closebutton>
                     <Offcanvas.Title>Search Filter</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
