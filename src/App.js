@@ -35,7 +35,13 @@ function App() {
       let apiUrl = `https://vpic.nhtsa.dot.gov/api/vehicles/GetVehicleTypesForMake/${make}?format=json`;
       // console.log(`getting all car types from ${make}...`);
       const res = await axios.get(apiUrl);
-      setTypes(res.data.Results);
+      const cleanRes = [];
+      for (let i = 0; i < res.data.Results.length; i++) {
+        if (res.data.Results[i].MakeName === make) {
+          cleanRes.push(res.data.Results[i]);
+        }
+      }
+      setTypes(cleanRes);
     } catch (err) {
       console.error(err);
     }

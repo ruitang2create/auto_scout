@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Spinner, Offcanvas, FormControl, Form, Row, Col } from 'react-bootstrap';
+import { Spinner, Offcanvas, FormControl, Form, Row, Col, Button } from 'react-bootstrap';
 import Layout from '../components/Layout';
 import ResultItem from '../components/ResultItem';
 import styles from '../styles/Results.module.css';
@@ -15,6 +15,7 @@ export default function Results(props) {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerpage] = useState(10);
     const itemsPerPageOptions = [5, 10, 15, 20, 50];
+    const [carMakeInput, setCarMakeInput] = useState(props.searchCriteria.make);
     const [filterByYear, setFilterByYear] = useState(props.searchCriteria.year !== '');
 
     const closeSidebar = () => setSidebarShow(false);
@@ -25,14 +26,18 @@ export default function Results(props) {
         setTypeUnset(true);
         setCurrentPage(1);
         if (makeName !== '') {
-            props.searchSetter({
-                ...props.searchCriteria,
-                make: makeName,
-                type: "",
-            });
-            props.getAllTypes(makeName);
+            setCarMakeInput(makeName);
         }
     };
+
+    const updateCarMake = () => {
+        props.searchSetter({
+            ...props.searchCriteria,
+            make: carMakeInput,
+            type: '',
+        });
+        props.getAllTypes(carMakeInput);
+    }
 
     const setTypeHandler = (event) => {
         const typeName = event.target.value;
@@ -101,7 +106,7 @@ export default function Results(props) {
     }
 
     const handleYearFilterClick = (event) => {
-        if(props.searchCriteria.year !== '') {
+        if (props.searchCriteria.year !== '') {
             props.searchSetter({
                 ...props.searchCriteria,
                 year: '',
@@ -194,8 +199,16 @@ export default function Results(props) {
                 <Offcanvas.Body>
                     <div className={styles.sideFilterContainer}>
                         <Form>
-                            <div className={styles.inputWrapper}>
-                                <FormControl as="select" onChange={setMakeHandler} defaultValue={props.searchCriteria.make}>
+                            <div className={styles.complexInputWrapper}>
+                                <FormControl type='search' list='makeList' placeholder='Car Make' onChange={setMakeHandler} defaultValue={carMakeInput} />
+                                <Button
+                                    variant='primary'
+                                    onClick={updateCarMake}
+                                    disabled={props.searchCriteria.make === carMakeInput}
+                                >
+                                    Apply
+                                </Button>
+                                <datalist id='makeList'>
                                     {props.allMakes.length > 0 &&
                                         props.allMakes.map((make, index) => {
                                             return (
@@ -204,7 +217,7 @@ export default function Results(props) {
                                                 </option>
                                             );
                                         })}
-                                </FormControl>
+                                </datalist>
                             </div>
                             <div className={styles.inputWrapper}>
                                 <FormControl as="select" onChange={setTypeHandler} defaultValue={props.searchCriteria.type}>
@@ -221,7 +234,7 @@ export default function Results(props) {
                                         })}
                                 </FormControl>
                             </div>
-                            <Form.Check type='checkbox' label='Filter by year' checked={filterByYear} onChange={handleYearFilterClick} />
+                            <Form.Check type='checkbox' label={'Filter by year' + (props.searchCriteria.year === '' ? '' : `: ${props.searchCriteria.year}`)} checked={filterByYear} onChange={handleYearFilterClick} />
                             <Form.Group as={Row}>
                                 <Form.Label column sm="2" xs="2">{props.yearLimit.MIN}</Form.Label>
                                 <Col sm="8" xs="8">

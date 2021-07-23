@@ -85,8 +85,8 @@ function Home(props) {
       />
       <Form className={styles.searchForm} onSubmit={handleSubmit}>
         <div className={styles.inputWrapper}>
-          <Form.Control ref={makeTarget} as="select" onChange={setMakeHandler}>
-            <option value="">Car Make</option>
+          <Form.Control type='search' list='makeList' placeholder='Car Make' ref={makeTarget} onChange={setMakeHandler} />
+          <datalist id='makeList'>
             {props.allMakes.length > 0 &&
               props.allMakes.map((make, index) => {
                 return (
@@ -95,7 +95,7 @@ function Home(props) {
                   </option>
                 );
               })}
-          </Form.Control>
+          </datalist>
         </div>
         <div className={styles.inputWrapper}>
           <Form.Control ref={typeTarget} as="select" onChange={setTypeHandler}>
