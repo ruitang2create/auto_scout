@@ -198,7 +198,7 @@ export default function Results(props) {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <div className={styles.sideFilterContainer}>
-                        <Form>
+                        <Form onSubmit={(e) => e.preventDefault()}>
                             <div className={styles.complexInputWrapper}>
                                 <FormControl type='search' list='makeList' placeholder='Car Make' onChange={setMakeHandler} defaultValue={carMakeInput} />
                                 <Button
