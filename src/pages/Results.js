@@ -160,7 +160,7 @@ export default function Results(props) {
                 <div className={styles.paginationContainer}>
                     {renderPagination()}
                     <div className={styles.itemsPerPageSelecterWrapper}>
-                        <label className={styles.itemsPerPageSelecterLabel}>items per page:</label>
+                        <label className={styles.itemsPerPageSelecterLabel}>items per page </label>
                         <select
                             className={styles.itemsPerPageSelecter}
                             value={itemsPerPage}
@@ -202,6 +202,7 @@ export default function Results(props) {
                             <div className={styles.complexInputWrapper}>
                                 <FormControl type='search' list='makeList' placeholder='Car Make' onChange={setMakeHandler} defaultValue={carMakeInput} />
                                 <Button
+                                    className={styles.updateMakeBtn}
                                     variant='primary'
                                     onClick={updateCarMake}
                                     disabled={props.searchCriteria.make === carMakeInput}
@@ -220,7 +221,11 @@ export default function Results(props) {
                                 </datalist>
                             </div>
                             <div className={styles.inputWrapper}>
-                                <FormControl as="select" onChange={setTypeHandler} defaultValue={props.searchCriteria.type}>
+                                <FormControl
+                                    as="select" onChange={setTypeHandler}
+                                    defaultValue={props.searchCriteria.type}
+                                    disabled={props.searchCriteria.make !== carMakeInput}
+                                >
                                     <option value="" selected={typeUnset}>
                                         Car Type
                                     </option>

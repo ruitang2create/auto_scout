@@ -69,6 +69,17 @@
     column-gap: .5rem;
 }
 
+.updateMakeBtn {
+    background-color: #74808f !important;
+    border-color: #74808f !important;
+    transition: .3s;
+}
+
+.updateMakeBtn:hover {
+    background-color: #555c63 !important;
+    border-color: #555c63 !important;
+}
+
 .noMatchAlert {
     margin-top: 2rem;
     font-size: clamp(1.2rem, 3vw, 2rem);
