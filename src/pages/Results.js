@@ -143,6 +143,13 @@ export default function Results(props) {
         );
     }
 
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        if (props.searchCriteria.make !== carMakeInput) {
+            updateCarMake();
+        }
+    }
+
     useEffect(() => {
         getModels(); // eslint-disable-next-line
     }, [props.searchCriteria]);
@@ -198,7 +205,7 @@ export default function Results(props) {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <div className={styles.sideFilterContainer}>
-                        <Form onSubmit={(e) => e.preventDefault()}>
+                        <Form onSubmit={handleFormSubmit}>
                             <div className={styles.complexInputWrapper}>
                                 <FormControl type='search' list='makeList' placeholder='Car Make' onChange={setMakeHandler} defaultValue={carMakeInput} />
                                 <Button
